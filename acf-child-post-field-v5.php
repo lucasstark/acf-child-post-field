@@ -315,11 +315,13 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 							<?php echo $before_fields; ?>
 
+								
 							<?php
 							// prevent childbuilder field from creating multiple conditional logic items for each row
 							$sub_field = $field['sub_fields'][0];
 							$sub_field['conditional_logic'] = 0;
-
+							$sub_field['wrapper']['class'] = $sub_field['wrapper']['class'] . ($i === 'acfcloneindex' ? 'acf-child-post-field-hide' : '');
+							
 							$acf_child_field_post_id = '';
 							// add value
 							if ( isset( $row[$sub_field['key']] ) ) {
@@ -333,93 +335,106 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 							$sub_field['value'] = $acf_child_field_post_id;
 							// update prefix to allow for nested values
 							$sub_field['prefix'] = "{$field['name']}[{$i}]";
-
-							// render input
-							acf_render_field_wrap( $sub_field, $el );
-
-
-							$post = get_post( $acf_child_field_post_id );
-
-							if ( $field['include_title_editor'] ) {
-								acf_render_field_wrap( acf_get_valid_field( array(
-								    'name' => "{$field['name']}[{$i}][post_data][post_title]",
-								    'label' => 'Title',
-								    'type' => 'text',
-								    'value' => $post->post_title,
-								    'required' => true
-									) ), $el );
+							if ($acf_child_field_post_id){
+								$post = get_post( $acf_child_field_post_id );
+							} else {
+								$post = new stdClass();
+								$post->post_title = '';
+								$post->post_content = '';
+								$post->post_excerpt = '';
+								$post->ID = '';
 							}
-
-							if ( $field['include_content_editor'] ) {
-								acf_render_field_wrap( acf_get_valid_field( array(
-								    'name' => "{$field['name']}[{$i}][post_data][post_content]",
-								    'label' => __( 'Post Content', 'acf_child_post_field' ),
-								    'type' => 'wysiwyg',
-								    'value' => $post->post_content,
-								    'required' => false
-									) ), $el );
-							}
-
-							if ( $field['include_excerpt_editor'] ) {
-								acf_render_field_wrap( acf_get_valid_field( array(
-								    'name' => "{$field['name']}[{$i}][post_data][post_excerpt]",
-								    'label' => __( 'Excerpt', 'acf_child_post_field' ),
-								    'type' => 'textarea',
-								    'value' => $post->post_excerpt,
-								    'required' => false
-									) ), $el );
-							}
-
-							if ( $field['include_featured_image_editor'] ) {
-								acf_render_field_wrap( acf_get_valid_field( array(
-								    'name' => "{$field['name']}[{$i}][post_data][featured_image]",
-								    'label' => __( 'Featured Image', 'acf_child_post_field' ),
-								    'type' => 'image',
-								    'value' => get_post_thumbnail_id( $post->ID ),
-								    'required' => false
-									) ), $el );
-							}
-
-							foreach ( $field['acf_child_field_fields'] as $child_field ):
-
-								// prevent childbuilder field from creating multiple conditional logic items for each row
-								if ( $i !== 'acfcloneindex' ) {
-									$child_field['conditional_logic'] = 0;
-								}
+							
+							?>
+					<div class="acf-field-list-title">
+						<span class="acf-field-list-title-span"><?php echo $post->post_title; ?> </span>
+					</div>	
+					
+					<?php
+					// render input
+					acf_render_field_wrap( $sub_field, $el );
 
 
-								// add value
-								if ( isset( $row['acf_child_field_values'][$child_field['key']] ) ) {
-									// this is a normal value
-									$child_field['value'] = $row['acf_child_field_values'][$child_field['key']];
-								} elseif ( isset( $child_field['default_value'] ) ) {
+					if ( $field['include_title_editor'] ) {
+						acf_render_field_wrap( acf_get_valid_field( array(
+						    'name' => "{$field['name']}[{$i}][post_data][post_title]",
+						    'label' => 'Title',
+						    'type' => 'text',
+						    'value' => $post->post_title,
+						    'required' => true
+							) ), $el );
+					}
 
-									// no value, but this sub field has a default value
-									$child_field['value'] = $child_field['default_value'];
-								}
+					if ( $field['include_content_editor'] ) {
+						acf_render_field_wrap( acf_get_valid_field( array(
+						    'name' => "{$field['name']}[{$i}][post_data][post_content]",
+						    'label' => __( 'Post Content', 'acf_child_post_field' ),
+						    'type' => 'wysiwyg',
+						    'value' => $post->post_content,
+						    'required' => false
+							) ), $el );
+					}
+
+					if ( $field['include_excerpt_editor'] ) {
+						acf_render_field_wrap( acf_get_valid_field( array(
+						    'name' => "{$field['name']}[{$i}][post_data][post_excerpt]",
+						    'label' => __( 'Excerpt', 'acf_child_post_field' ),
+						    'type' => 'textarea',
+						    'value' => $post->post_excerpt,
+						    'required' => false
+							) ), $el );
+					}
+
+					if ( $field['include_featured_image_editor'] ) {
+						acf_render_field_wrap( acf_get_valid_field( array(
+						    'name' => "{$field['name']}[{$i}][post_data][featured_image]",
+						    'label' => __( 'Featured Image', 'acf_child_post_field' ),
+						    'type' => 'image',
+						    'value' => get_post_thumbnail_id( $post->ID ),
+						    'required' => false
+							) ), $el );
+					}
+
+					foreach ( $field['acf_child_field_fields'] as $child_field ):
+
+						// prevent childbuilder field from creating multiple conditional logic items for each row
+						if ( $i !== 'acfcloneindex' ) {
+							$child_field['conditional_logic'] = 0;
+						}
 
 
-								// update prefix to allow for nested values
-								$child_field['prefix'] = "{$field['name']}[{$i}]";
+						// add value
+						if ( isset( $row['acf_child_field_values'][$child_field['key']] ) ) {
+							// this is a normal value
+							$child_field['value'] = $row['acf_child_field_values'][$child_field['key']];
+						} elseif ( isset( $child_field['default_value'] ) ) {
+
+							// no value, but this sub field has a default value
+							$child_field['value'] = $child_field['default_value'];
+						}
 
 
-								// render input
-								acf_render_field_wrap( $child_field, $el );
-								?>
+						// update prefix to allow for nested values
+						$child_field['prefix'] = "{$field['name']}[{$i}]";
 
-							<?php endforeach; ?>
 
-							<?php echo $after_fields; ?>
+						// render input
+						acf_render_field_wrap( $child_field, $el );
+						?>
 
-							<?php if ( $show_remove ): ?>
-								<td class="remove">
-									<a class="acf-icon small acf-childbuilder-add-row" href="#" data-before="1" title="<?php _e( 'Add row', 'acf_child_post_field' ); ?>"><i class="acf-sprite-add"></i></a>
-									<a class="acf-icon small acf-childbuilder-remove-row" href="#" title="<?php _e( 'Remove row', 'acf_child_post_field' ); ?>"><i class="acf-sprite-remove"></i></a>
-								</td>
-							<?php endif; ?>
-
-						</tr>
 					<?php endforeach; ?>
+
+					<?php echo $after_fields; ?>
+
+					<?php if ( $show_remove ): ?>
+						<td class="remove">
+							<a class="acf-icon small acf-childbuilder-add-row" href="#" data-before="1" title="<?php _e( 'Add row', 'acf_child_post_field' ); ?>"><i class="acf-sprite-add"></i></a>
+							<a class="acf-icon small acf-childbuilder-remove-row" href="#" title="<?php _e( 'Remove row', 'acf_child_post_field' ); ?>"><i class="acf-sprite-remove"></i></a>
+						</td>
+					<?php endif; ?>
+
+					</tr>
+				<?php endforeach; ?>
 				</tbody>
 			</table>
 			<?php if ( $show_add ): ?>
@@ -735,11 +750,11 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 					if ( $field['include_featured_image_editor'] ) {
 						$image_id = isset( $row['post_data']['featured_image'] ) ? $row['post_data']['featured_image'] : 0;
-						update_post_meta($child_post_id, '_thumbnail_id', $image_id);	
+						update_post_meta( $child_post_id, '_thumbnail_id', $image_id );
 					}
 				}
 
-				
+
 				// modify name for save
 				$sub_field['name'] = "{$field['name']}_{$i}_acf_child_field_post_id";
 				// update field
@@ -799,47 +814,29 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 	}
 
 	/*
-	 *  format_value()
-	 *
-	 *  This filter is appied to the $value after it is loaded from the db and before it is returned to the template
-	 *
-	 *  @type	filter
-	 *  @since	3.6
-	 *  @date	23/01/13
-	 *
-	 *  @param	$value (mixed) the value which was loaded from the database
-	 *  @param	$post_id (mixed) the $post_id from which the value was loaded
-	 *  @param	$field (array) the field array holding all the field options
-	 *
-	 *  @return	$value (mixed) the modified value
-	 */
-
-	/*
-
-	  function format_value( $value, $post_id, $field ) {
-
-	  // bail early if no value
-	  if( empty($value) ) {
-
-	  return $value;
-
-	  }
-
-
-	  // apply setting
-	  if( $field['font_size'] > 12 ) {
-
-	  // format the value
-	  // $value = 'something';
-
-	  }
-
-
-	  // return
-	  return $value;
-	  }
-
-	 */
+	*  format_value()
+	*
+	*  This filter is appied to the $value after it is loaded from the db and before it is returned to the template
+	*
+	*  @type	filter
+	*  @since	3.6
+	*  @date	23/01/13
+	*
+	*  @param	$value (mixed) the value which was loaded from the database
+	*  @param	$post_id (mixed) the $post_id from which the value was loaded
+	*  @param	$field (array) the field array holding all the field options
+	*
+	*  @return	$value (mixed) the modified value
+	*/
+	function format_value( $value, $post_id, $field ) {
+		
+		// bail early if no value
+		if( empty($value) ) {	
+			return $value;
+		}
+		
+		return wp_list_pluck($value, '_acf_child_field_post_id');
+	}
 
 
 	/*
