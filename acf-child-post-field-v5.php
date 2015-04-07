@@ -28,7 +28,9 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		    'include_content_editor' => 0,
 		    'include_excerpt_editor' => 0,
 		    'include_featured_image_editor' => 0,
+		    'child_management_type' => 'create_only_and_link',
 		);
+		
 		$this->l10n = array(
 		    'min' => __( "Minimum children reached ({min} rows)", 'acf_child_post_field' ),
 		    'max' => __( "Maximum children reached ({max} rows)", 'acf_child_post_field' ),
@@ -121,6 +123,24 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		    'std' => 0,
 		    'choices' => array(1 => 'Yes', 0 => 'No')
 		) );
+		
+		
+		
+		acf_render_field_setting( $field, array(
+		    'label' => __( 'Child management type', 'acf_child_post_field' ),
+		    'instructions' => __('Select the method for managing child posts and the Post Parent link', 'acf_child_post_field'),
+		    'class' => 'acf-childbuilder-parent-set',
+		    'type' => 'radio',
+		    'name' => 'child_management_type',
+		    'std' => 'create_only',
+		    'choices' => array(
+			'create_only_and_link' => __('Add New and Link:  <i>Post parent will be set</i>', 'acf_child_post_field'),
+			'create_only' => __('Add New: <i>Post parent will not be set</i>', 'acf_child_post_field'),
+			'create_and_search_and_link' => __('Add New, Add Existing and Link: <i>Post parent will be set or updated</i>', 'acf_child_post_field'),
+			'create_and_search' => __('Add New and Add Existing:  <i>Post parent will not be set or updated</i>', 'acf_child_post_field'),
+		    )
+		) );
+		
 
 		acf_render_field_setting( $field, array(
 		    'label' => __( 'Field Groups', 'acf_child_post_field' ),
@@ -346,9 +366,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 							}
 							
 							?>
-					<div class="acf-field-list-title">
-						<span class="acf-field-list-title-span"><?php echo $post->post_title; ?> </span>
-					</div>	
+						
 					
 					<?php
 					// render input
@@ -725,15 +743,27 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 				);
 
 				if ( empty( $child_post_id ) ) {
+					
+					if ($field['child_management_type'] == 'create_only_and_link' || $field['child_management_type'] == 'create_and_search_and_link') {
+						$post_data['post_parent'] = $post_id;
+					}
+					
 					$result = wp_insert_post( $post_data );
 					if ( $result && !is_wp_error( $result ) ) {
 						$child_post_id = $result;
 					}
+					
+					add_post_meta($child_post_id, '_acf_child_post_field_belongs_to', $post_id);
 				} else {
-
+					
 					$the_child_post = get_post( $child_post_id );
 					$post_data['ID'] = $child_post_id;
 
+					if ($field['child_management_type'] == 'create_only_and_link' || $field['child_management_type'] == 'create_and_search_and_link') {
+						$post_data['post_parent'] = $post_id;
+					}
+					
+					
 					//Reset the fields if we haven't configured them to be editable. 
 					if ( !$field['include_title_editor'] ) {
 						$post_data['post_title'] = $the_child_post->post_title;
@@ -753,8 +783,16 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 						$image_id = isset( $row['post_data']['featured_image'] ) ? $row['post_data']['featured_image'] : 0;
 						update_post_meta( $child_post_id, '_thumbnail_id', $image_id );
 					}
+					
+					
+					$belongs_to = get_post_meta($child_post_id, '_acf_child_post_field_belongs_to', false);
+					if ( empty($belongs_to) && !in_array( $post_id, $belongs_to)){
+						add_post_meta($child_post_id, '_acf_child_post_field_belongs_to', $post_id);
+					}
 				}
 
+				
+				
 
 				// modify name for save
 				$sub_field['name'] = "{$field['name']}_{$i}_acf_child_field_post_id";
