@@ -1,0 +1,38 @@
+/*---------------------------------------------------------------------------------------------
+*
+*  Post Manager
+*
+*---------------------------------------------------------------------------------------------*/
+.acf-childbuilder .acf-input-table {
+  margin: 0 0 8px;
+}
+.acf-childbuilder .acf-row.acf-clone {
+  display: none !important;
+}
+.acf-childbuilder .acf-input-table td.remove .acf-icon {
+  position: relative;
+  margin-left: -1px;
+}
+.acf-childbuilder .acf-input-table td.remove .acf-childbuilder-add-row {
+  position: absolute;
+  margin-top: -22px;
+}
+/* sortable */
+.acf-childbuilder .acf-input-table > tbody > tr.ui-sortable-helper {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+.acf-childbuilder .acf-input-table > tbody > tr.ui-sortable-placeholder {
+  visibility: visible !important;
+}
+.acf-childbuilder .acf-input-table > tbody > tr.ui-sortable-placeholder td {
+  background: #F9F9F9;
+}
+/* empty */
+.acf-childbuilder.empty table thead th {
+  border-bottom: 0 none;
+}
+.acf-childbuilder.empty table.row-layout {
+  box-shadow: none;
+  border: 0 none;
+  margin: 0;
+}
