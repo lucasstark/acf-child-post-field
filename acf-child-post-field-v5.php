@@ -9,7 +9,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 			self::$instance = new ACF_Child_Post_Field_V5();
 		}
 	}
-	
+
 	function __construct() {
 
 		// vars
@@ -26,7 +26,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		    'button_label' => __( "Add Child", 'acf_child_post_field' ),
 		    'include_title_editor' => 1,
 		    'include_content_editor' => 0,
-		    'include_excerpt_editor' => 0, 
+		    'include_excerpt_editor' => 0,
 		    'include_featured_image_editor' => 0,
 		);
 		$this->l10n = array(
@@ -86,9 +86,9 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		    'layout' => 'horizontal',
 		    'name' => 'include_title_editor',
 		    'std' => 1,
-		    'choices' => array( 1 => 'Yes', 0 => 'No')
+		    'choices' => array(1 => 'Yes', 0 => 'No')
 		) );
-		
+
 		acf_render_field_setting( $field, array(
 		    'label' => __( 'Include Content WYSIWYG', 'acf_child_post_field' ),
 		    'instructions' => '',
@@ -97,9 +97,9 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		    'layout' => 'horizontal',
 		    'name' => 'include_content_editor',
 		    'std' => 0,
-		    'choices' => array( 1 => 'Yes', 0 => 'No')
+		    'choices' => array(1 => 'Yes', 0 => 'No')
 		) );
-		
+
 		acf_render_field_setting( $field, array(
 		    'label' => __( 'Include Excerpt Field', 'acf_child_post_field' ),
 		    'instructions' => '',
@@ -108,9 +108,9 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		    'layout' => 'horizontal',
 		    'name' => 'include_excerpt_editor',
 		    'std' => 0,
-		    'choices' => array( 1 => 'Yes', 0 => 'No')
+		    'choices' => array(1 => 'Yes', 0 => 'No')
 		) );
-		
+
 		acf_render_field_setting( $field, array(
 		    'label' => __( 'Include Featured Image Field', 'acf_child_post_field' ),
 		    'instructions' => '',
@@ -119,9 +119,9 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		    'layout' => 'horizontal',
 		    'name' => 'include_featured_image_editor',
 		    'std' => 0,
-		    'choices' => array( 1 => 'Yes', 0 => 'No')
+		    'choices' => array(1 => 'Yes', 0 => 'No')
 		) );
-		
+
 		acf_render_field_setting( $field, array(
 		    'label' => __( 'Field Groups', 'acf_child_post_field' ),
 		    'instructions' => __( 'Field Groups to Load', 'acf_child_post_field' ),
@@ -130,7 +130,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		    'name' => 'fieldgroups',
 		    'choices' => $field_groups_array
 		) );
-			
+
 		// rows
 		$field['min'] = empty( $field['min'] ) ? '' : $field['min'];
 		$field['max'] = empty( $field['max'] ) ? '' : $field['max'];
@@ -340,34 +340,44 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 							$post = get_post( $acf_child_field_post_id );
 
-							if ($field['include_title_editor']) {
-							acf_render_field_wrap( acf_get_valid_field( array(
-							    'name' => "{$field['name']}[{$i}][post_data][post_title]",
-							    'label' => 'Title',
-							    'type' => 'text',
-							    'value' => $post->post_title,
-							    'required' => true
-								) ), $el );
+							if ( $field['include_title_editor'] ) {
+								acf_render_field_wrap( acf_get_valid_field( array(
+								    'name' => "{$field['name']}[{$i}][post_data][post_title]",
+								    'label' => 'Title',
+								    'type' => 'text',
+								    'value' => $post->post_title,
+								    'required' => true
+									) ), $el );
 							}
-							
+
 							if ( $field['include_content_editor'] ) {
 								acf_render_field_wrap( acf_get_valid_field( array(
 								    'name' => "{$field['name']}[{$i}][post_data][post_content]",
-								    'label' => __('Post Content', 'acf_child_post_field'),
+								    'label' => __( 'Post Content', 'acf_child_post_field' ),
 								    'type' => 'wysiwyg',
 								    'value' => $post->post_content,
 								    'required' => false
-								) ), $el );
+									) ), $el );
 							}
-							
-							if ($field['include_excerpt_editor']) {
-							acf_render_field_wrap( acf_get_valid_field( array(
-							    'name' => "{$field['name']}[{$i}][post_data][post_excerpt]",
-							    'label' => 'Title',
-							    'type' => 'textarea',
-							    'value' => $post->post_excerpt,
-							    'required' => false
-							   ) ), $el );
+
+							if ( $field['include_excerpt_editor'] ) {
+								acf_render_field_wrap( acf_get_valid_field( array(
+								    'name' => "{$field['name']}[{$i}][post_data][post_excerpt]",
+								    'label' => __( 'Excerpt', 'acf_child_post_field' ),
+								    'type' => 'textarea',
+								    'value' => $post->post_excerpt,
+								    'required' => false
+									) ), $el );
+							}
+
+							if ( $field['include_featured_image_editor'] ) {
+								acf_render_field_wrap( acf_get_valid_field( array(
+								    'name' => "{$field['name']}[{$i}][post_data][featured_image]",
+								    'label' => __( 'Featured Image', 'acf_child_post_field' ),
+								    'type' => 'image',
+								    'value' => get_post_thumbnail_id( $post->ID ),
+								    'required' => false
+									) ), $el );
 							}
 
 							foreach ( $field['acf_child_field_fields'] as $child_field ):
@@ -704,10 +714,32 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 						$child_post_id = $result;
 					}
 				} else {
+
+					$the_child_post = get_post( $child_post_id );
 					$post_data['ID'] = $child_post_id;
+
+					//Reset the fields if we haven't configured them to be editable. 
+					if ( !$field['include_title_editor'] ) {
+						$post_data['post_title'] = $the_child_post->post_title;
+					}
+
+					if ( !$field['include_content_editor'] ) {
+						$post_data['post_title'] = $the_child_post->post_content;
+					}
+
+					if ( !$field['include_excerpt_editor'] ) {
+						$post_data['post_title'] = $the_child_post->post_excerpt;
+					}
+
 					wp_update_post( $post_data );
+
+					if ( $field['include_featured_image_editor'] ) {
+						$image_id = isset( $row['post_data']['featured_image'] ) ? $row['post_data']['featured_image'] : 0;
+						update_post_meta($child_post_id, '_thumbnail_id', $image_id);	
+					}
 				}
 
+				
 				// modify name for save
 				$sub_field['name'] = "{$field['name']}_{$i}_acf_child_field_post_id";
 				// update field
