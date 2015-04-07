@@ -4,7 +4,7 @@
  * Plugin Name: Advanced Custom Fields:  Child Post Field
  * Plugin URI: https://github.com/lucasstark/acf-child-post-field/
  * Description: Adds the ability to manage related posts directly from a parent post.
- * Version: 1.0.0
+ * Version: 0.0.0-alpha
  * Author: Lucas Stark
  * Author URI: http://lucasstark.com
  * Requires at least: 4.0
