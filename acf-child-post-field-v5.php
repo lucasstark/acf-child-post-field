@@ -9,25 +9,12 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 			self::$instance = new ACF_Child_Post_Field_V5();
 		}
 	}
-
-	/*
-	 *  __construct
-	 *
-	 *  This function will setup the field type data
-	 *
-	 *  @type	function
-	 *  @date	5/03/2014
-	 *  @since	5.0.0
-	 *
-	 *  @param	n/a
-	 *  @return	n/a
-	 */
-
+	
 	function __construct() {
 
 		// vars
 		$this->name = 'childbuilder';
-		$this->label = __( "Child Post", 'acf' );
+		$this->label = __( "Child Post", 'acf_child_post_field' );
 		$this->category = 'layout';
 		$this->defaults = array(
 		    'post_type' => 'post',
@@ -36,14 +23,15 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		    'min' => 0,
 		    'max' => 0,
 		    'layout' => 'block',
-		    'button_label' => __( "Add Child", 'acf' ),
-		    'include_content_editor' => 0,
+		    'button_label' => __( "Add Child", 'acf_child_post_field' ),
 		    'include_title_editor' => 1,
-		    'include_excerpt_editor' => 0
+		    'include_content_editor' => 0,
+		    'include_excerpt_editor' => 0, 
+		    'include_featured_image_editor' => 0,
 		);
 		$this->l10n = array(
-		    'min' => __( "Minimum children reached ({min} rows)", 'acf' ),
-		    'max' => __( "Maximum children reached ({max} rows)", 'acf' ),
+		    'min' => __( "Minimum children reached ({min} rows)", 'acf_child_post_field' ),
+		    'max' => __( "Maximum children reached ({max} rows)", 'acf_child_post_field' ),
 		);
 
 
@@ -74,8 +62,8 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		}
 
 		acf_render_field_setting( $field, array(
-		    'label' => __( 'Post Type', 'acf' ),
-		    'instructions' => __( 'The childbuilder post type to manage', 'acf' ),
+		    'label' => __( 'Post Type', 'acf_child_post_field' ),
+		    'instructions' => __( 'The childbuilder post type to manage', 'acf_child_post_field' ),
 		    'class' => 'acf-childbuilder-field-post-type',
 		    'type' => 'select',
 		    'name' => 'post_type',
@@ -91,15 +79,58 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		}
 
 		acf_render_field_setting( $field, array(
-		    'label' => __( 'Field Groups', 'acf' ),
-		    'instructions' => __( 'Field Groups to Load', 'acf' ),
+		    'label' => __( 'Include Title Field', 'acf_child_post_field' ),
+		    'instructions' => '',
+		    'class' => 'acf-childbuilder-field-include',
+		    'type' => 'radio',
+		    'layout' => 'horizontal',
+		    'name' => 'include_title_editor',
+		    'std' => 1,
+		    'choices' => array( 1 => 'Yes', 0 => 'No')
+		) );
+		
+		acf_render_field_setting( $field, array(
+		    'label' => __( 'Include Content WYSIWYG', 'acf_child_post_field' ),
+		    'instructions' => '',
+		    'class' => 'acf-childbuilder-field-include',
+		    'type' => 'radio',
+		    'layout' => 'horizontal',
+		    'name' => 'include_content_editor',
+		    'std' => 0,
+		    'choices' => array( 1 => 'Yes', 0 => 'No')
+		) );
+		
+		acf_render_field_setting( $field, array(
+		    'label' => __( 'Include Excerpt Field', 'acf_child_post_field' ),
+		    'instructions' => '',
+		    'class' => 'acf-childbuilder-field-include',
+		    'type' => 'radio',
+		    'layout' => 'horizontal',
+		    'name' => 'include_excerpt_editor',
+		    'std' => 0,
+		    'choices' => array( 1 => 'Yes', 0 => 'No')
+		) );
+		
+		acf_render_field_setting( $field, array(
+		    'label' => __( 'Include Featured Image Field', 'acf_child_post_field' ),
+		    'instructions' => '',
+		    'class' => 'acf-childbuilder-field-include',
+		    'type' => 'radio',
+		    'layout' => 'horizontal',
+		    'name' => 'include_featured_image_editor',
+		    'std' => 0,
+		    'choices' => array( 1 => 'Yes', 0 => 'No')
+		) );
+		
+		acf_render_field_setting( $field, array(
+		    'label' => __( 'Field Groups', 'acf_child_post_field' ),
+		    'instructions' => __( 'Field Groups to Load', 'acf_child_post_field' ),
 		    'class' => 'acf-childbuilder-field-groups',
 		    'type' => 'checkbox',
 		    'name' => 'fieldgroups',
 		    'choices' => $field_groups_array
 		) );
-
-
+			
 		// rows
 		$field['min'] = empty( $field['min'] ) ? '' : $field['min'];
 		$field['max'] = empty( $field['max'] ) ? '' : $field['max'];
@@ -108,7 +139,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 		// min
 		acf_render_field_setting( $field, array(
-		    'label' => __( 'Minimum Rows', 'acf' ),
+		    'label' => __( 'Minimum Rows', 'acf_child_post_field' ),
 		    'instructions' => '',
 		    'type' => 'number',
 		    'name' => 'min',
@@ -118,7 +149,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 		// max
 		acf_render_field_setting( $field, array(
-		    'label' => __( 'Maximum Rows', 'acf' ),
+		    'label' => __( 'Maximum Rows', 'acf_child_post_field' ),
 		    'instructions' => '',
 		    'type' => 'number',
 		    'name' => 'max',
@@ -128,21 +159,21 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 		// layout
 		acf_render_field_setting( $field, array(
-		    'label' => __( 'Layout', 'acf' ),
+		    'label' => __( 'Layout', 'acf_child_post_field' ),
 		    'instructions' => '',
 		    'class' => 'acf-childbuilder-field-layout',
 		    'type' => 'radio',
 		    'name' => 'layout',
 		    'layout' => 'horizontal',
 		    'choices' => array(
-			'block' => __( 'Block', 'acf' ),
+			'block' => __( 'Block', 'acf_child_post_field' ),
 		    )
 		) );
 
 
 		// button_label
 		acf_render_field_setting( $field, array(
-		    'label' => __( 'Button Label', 'acf' ),
+		    'label' => __( 'Button Label', 'acf_child_post_field' ),
 		    'instructions' => '',
 		    'type' => 'text',
 		    'name' => 'button_label',
@@ -279,7 +310,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 						<tr class="acf-row<?php echo ($i === 'acfcloneindex') ? ' acf-clone' : ''; ?>">
 
 							<?php if ( $show_order ): ?>
-								<td class="order" title="<?php _e( 'Drag to reorder', 'acf' ); ?>"><?php echo intval( $i ) + 1; ?></td>
+								<td class="order" title="<?php _e( 'Drag to reorder', 'acf_child_post_field' ); ?>"><?php echo intval( $i ) + 1; ?></td>
 							<?php endif; ?>
 
 							<?php echo $before_fields; ?>
@@ -322,7 +353,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 							if ( $field['include_content_editor'] ) {
 								acf_render_field_wrap( acf_get_valid_field( array(
 								    'name' => "{$field['name']}[{$i}][post_data][post_content]",
-								    'label' => 'Title',
+								    'label' => __('Post Content', 'acf_child_post_field'),
 								    'type' => 'wysiwyg',
 								    'value' => $post->post_content,
 								    'required' => false
@@ -372,8 +403,8 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 							<?php if ( $show_remove ): ?>
 								<td class="remove">
-									<a class="acf-icon small acf-childbuilder-add-row" href="#" data-before="1" title="<?php _e( 'Add row', 'acf' ); ?>"><i class="acf-sprite-add"></i></a>
-									<a class="acf-icon small acf-childbuilder-remove-row" href="#" title="<?php _e( 'Remove row', 'acf' ); ?>"><i class="acf-sprite-remove"></i></a>
+									<a class="acf-icon small acf-childbuilder-add-row" href="#" data-before="1" title="<?php _e( 'Add row', 'acf_child_post_field' ); ?>"><i class="acf-sprite-add"></i></a>
+									<a class="acf-icon small acf-childbuilder-remove-row" href="#" title="<?php _e( 'Remove row', 'acf_child_post_field' ); ?>"><i class="acf-sprite-remove"></i></a>
 								</td>
 							<?php endif; ?>
 
