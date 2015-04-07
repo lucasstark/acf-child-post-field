@@ -708,12 +708,13 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 				// increase total
 				$total++;
-
+				
+				//Update the actual child post
 				$child_post_id = 0;
 				if ( isset( $row['_acf_child_field_post_id'] ) && !empty( $row['_acf_child_field_post_id'] ) ) {
 					$child_post_id = $row['_acf_child_field_post_id'];
 				}
-
+				
 				$post_data = array(
 				    'post_type' => $field['post_type'],
 				    'post_status' => 'publish',
@@ -758,10 +759,9 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 				// modify name for save
 				$sub_field['name'] = "{$field['name']}_{$i}_acf_child_field_post_id";
 				// update field
-
 				acf_update_value( $child_post_id, $post_id, $sub_field );
 
-				// loop through sub fields
+				// loop through sub fields which have been loaded from the child field groups. 
 				if ( !empty( $field['acf_child_field_fields'] ) ) {
 
 					foreach ( $field['acf_child_field_fields'] as $child_field ) {
