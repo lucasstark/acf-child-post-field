@@ -13,6 +13,8 @@
  * Text Domain: acf_child_post
  * Domain Path: /i18n/languages/
  *
+ * GitHub Plugin URI: lucasstark/acf-child-post-field
+ *
  * @package ACF_Child_Post_Field
  * @category Core
  * @author Lucas Stark
