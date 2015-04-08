@@ -231,16 +231,12 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 		// populate the empty row data (used for acfcloneindex and min setting)
 		$empty_row = array();
-
-		foreach ( $field['sub_fields'] as $f ) {
-			$empty_row[$f['key']] = isset( $f['default_value'] ) ? $f['default_value'] : false;
-		}
+		$empty_row[$field['acf_child_field']['key']] = isset( $field['acf_child_field']['default_value'] ) ? $field['acf_child_field']['default_value'] : false;
 
 		foreach ( $field['acf_child_field_fields'] as $f ) {
 			$empty_row[$f['key']] = isset( $f['default_value'] ) ? $f['default_value'] : false;
 		}
-
-
+		
 		// If there are less values than min, populate the extra values
 		if ( $field['min'] ) {
 
@@ -338,14 +334,12 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 							<?php
 							// prevent childbuilder field from creating multiple conditional logic items for each row
-							$sub_field = $field['sub_fields'][0];
-
+							$sub_field = $field['acf_child_field'];
 							if ( $i !== 'acfcloneindex' ) {
 								$sub_field['readonly'] = 'readonly';
 							} else {
 								$sub_field['readonly'] = 0;
 							}
-
 							$sub_field['conditional_logic'] = 0;
 							$sub_field['wrapper']['class'] = $sub_field['wrapper']['class'] . ($i === 'acfcloneindex' ? 'acf-child-post-field-hide' : '');
 
@@ -362,6 +356,8 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 							$sub_field['value'] = $acf_child_field_post_id;
 							// update prefix to allow for nested values
 							$sub_field['prefix'] = "{$field['name']}[{$i}]";
+
+
 							if ( $acf_child_field_post_id ) {
 								$post = get_post( $acf_child_field_post_id );
 							} else {
@@ -622,7 +618,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 	function load_value( $value, $post_id, $field ) {
 
 		// bail early if no value
-		if ( empty( $value ) || empty( $field['sub_fields'] ) ) {
+		if ( empty( $value ) ) {
 			return $value;
 		}
 
@@ -645,20 +641,15 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 				$rows[$i] = array();
 
 
-				// get sub field
-				$sub_field = $field['sub_fields'][0];
+				// get the child id field. 
+				$sub_field = $field['acf_child_field'];
 
 
 				// update $sub_field name
 				$sub_field['name'] = "{$field['name']}_{$i}_acf_child_field_post_id";
 
-
 				// get value
 				$acf_child_field_post_id = acf_get_value( $post_id, $sub_field );
-
-
-
-
 
 				// add value
 				$rows[$i][$sub_field['key']] = $acf_child_field_post_id;
@@ -724,7 +715,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 			// loop through rows
 			foreach ( $value as $row ) {
 
-				$sub_field = $field['sub_fields'][0];
+				$sub_field = $field['acf_child_field'];
 
 				// $i
 				$i++;
@@ -842,16 +833,12 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		if ( $old_total > $total ) {
 
 			for ( $i = $total; $i < $old_total; $i++ ) {
-
-				foreach ( $field['sub_fields'] as $sub_field ) {
-
-					acf_delete_value( $post_id, "{$field['name']}_{$i}_{$sub_field['name']}" );
-				}
+				acf_delete_value( $post_id, "{$field['name']}_{$i}_{$field['acf_child_field']['name']}" );
 				// foreach
 			}
 			// for
 		}
-
+		
 		// if
 		// update $value and return to allow for the normal save function to run
 		$value = $total;
@@ -970,6 +957,17 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 	 */
 
 	function load_field( $field ) {
+
+		$field['acf_child_field'] = acf_get_valid_field(
+			array(
+			    'ID' => 0,
+			    'name' => '_acf_child_field_post_id',
+			    'key' => '_acf_child_field_post_id',
+			    'type' => 'text',
+			    'label' => 'Child ID'
+			)
+		);
+
 		$field['acf_child_field_fields'] = array();
 
 		if ( !empty( $field['fieldgroups'] ) ) {
@@ -979,7 +977,6 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		}
 
 		$field['sub_fields'] = array();
-
 		$field['sub_fields'][] = acf_get_valid_field(
 			array(
 			    'ID' => 0,
@@ -989,6 +986,8 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 			    'label' => 'Child ID'
 			)
 		);
+
+
 
 		return $field;
 	}
@@ -1010,6 +1009,8 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 	function update_field( $field ) {
 		// remove sub fields
+
+		unset( $field['acf_child_field'] );
 		unset( $field['sub_fields'] );
 		unset( $field['acf_child_field_fields'] );
 
