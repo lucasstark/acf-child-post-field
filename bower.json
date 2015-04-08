@@ -1,0 +1,13 @@
+{
+  "name": "acf-child-post-field",
+  "version": "1.0.0",
+  "homepage": "http://lucasstark.com",
+  "private": true,
+  "ignore": [
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "bourbon": "~3.2.3"
+  }
+}

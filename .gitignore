@@ -11,6 +11,7 @@ sftp-config.json
 # Grunt
 /node_modules/
 /deploy/
+bower_components
 
 # Sass
 .sass-cache/
@@ -30,3 +31,5 @@ Thumbs.db
 
 # Logs
 /logs
+.sass-cache
+node_modules
