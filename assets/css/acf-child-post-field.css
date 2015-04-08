@@ -1,0 +1,198 @@
+/*---------------------------------------------------------------------------------------------
+*
+*  Postbox: Fields
+*
+*---------------------------------------------------------------------------------------------*/
+.acf-childbuilder {
+  /* table header */
+  /* field list */
+  /* field object */
+}
+.acf-childbuilder .acf-clone {
+  display: none;
+}
+.acf-childbuilder .no-fields-message {
+  padding: 15px 15px;
+}
+.acf-childbuilder .acf-field-list-wrap {
+  border: #DFDFDF solid 1px;
+}
+.acf-childbuilder .li-field-order {
+  width: 22%;
+  padding-right: 0 !important;
+}
+.acf-childbuilder .li-field-label {
+  width: 28%;
+}
+.acf-childbuilder .li-field-name, .acf-childbuilder .li-field-type {
+  width: 25%;
+}
+.acf-childbuilder .acf-field-list {
+  background: #F9F9F9;
+  border-top: #E1E1E1 solid 1px;
+  margin-top: -1px;
+}
+.acf-childbuilder .acf-field-list a {
+  text-decoration: none;
+}
+.acf-childbuilder .acf-field-list a:active, .acf-childbuilder .acf-field-list a:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.acf-childbuilder .acf-field-object {
+  border-top: #F0F0F0 solid 1px;
+  background: #fff;
+}
+.acf-childbuilder .acf-field-object:first-child {
+  border-top: 0 none;
+}
+.acf-childbuilder .acf-field-object.ui-sortable-helper {
+  border-top-color: #fff;
+  -webkit-box-shadow: 0 0 0 1px #dfdfdf, 0 1px 4px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 0 1px #dfdfdf, 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+.acf-childbuilder .acf-field-object.ui-sortable-placeholder {
+  -webkit-box-shadow: 0 -1px 0 0 #dfdfdf;
+          box-shadow: 0 -1px 0 0 #dfdfdf;
+  visibility: visible !important;
+  background: #F9F9F9;
+  border-top-color: transparent;
+}
+.acf-childbuilder .acf-field-object.open + .acf-field-object {
+  border-top-color: #E1E1E1;
+}
+.acf-childbuilder .acf-field-object .meta {
+  display: none;
+}
+.acf-childbuilder .acf-field-object .handle li {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  word-wrap: break-word;
+}
+.acf-childbuilder .acf-field-object .handle .acf-icon {
+  margin: 1px 5px 0 0;
+  cursor: move;
+  background: transparent;
+  float: left;
+}
+.acf-childbuilder .acf-field-object .handle strong {
+  display: block;
+  padding-bottom: 6px;
+  font-size: 14px;
+  line-height: 14px;
+  min-height: 14px;
+}
+.acf-childbuilder .acf-field-object .handle .row-options {
+  visibility: hidden;
+}
+.acf-childbuilder .acf-field-object:hover > .handle .row-options {
+  visibility: visible;
+}
+.acf-childbuilder .acf-field-object .handle .row-options a {
+  margin-right: 4px;
+}
+.acf-childbuilder .acf-field-object .handle .delete-field:hover {
+  color: #f00;
+}
+.acf-childbuilder .acf-field-object.open > .handle {
+  background: #3595BC;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#46afdb), to(#3199c5));
+  /* Safari 4+, Chrome */
+  background-image: -webkit-linear-gradient(top, #46afdb, #3199c5);
+  /* Chrome 10+, Safari 5.1+, iOS 5+ */
+  /* Firefox 3.6-15 */
+  background-image: -o-linear-gradient(top, #46afdb, #3199c5);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(to bottom, #46afdb, #3199c5);
+  /* Firefox 16+ */
+  border: #268FBB solid 1px;
+  text-shadow: #268FBB 0 1px 0;
+  -webkit-box-shadow: inset #5FC8F4 0 1px 0 0;
+          box-shadow: inset #5FC8F4 0 1px 0 0;
+  color: #fff;
+  position: relative;
+  margin: -1px -1px 0 -1px;
+}
+.acf-childbuilder .acf-field-object.open > .handle a {
+  color: #fff !important;
+}
+.acf-childbuilder .acf-field-object.open > .handle .acf-icon {
+  border-color: #fff;
+}
+.acf-childbuilder .acf-field-object .settings {
+  display: none;
+  width: 100%;
+}
+.acf-childbuilder .acf-field-object .location-groups {
+  margin-top: 10px;
+}
+.acf-childbuilder .acf-field-object .handle .pre-field-key {
+  background: #F9F9F9;
+  border: #E1E1E1 solid 1px;
+  padding: 5px;
+  font: inherit;
+  margin: 3px 0 0;
+  float: left;
+  border-radius: 3px;
+  display: none;
+}
+.acf-childbuilder .acf-field-object.open > .handle .pre-field-key {
+  border-color: #268FBB;
+  background: transparent;
+}
+
+.acf-child-post-field-hide {
+  display: none;
+}
+
+/*---------------------------------------------------------------------------------------------
+*
+*  Post Manager
+*
+*---------------------------------------------------------------------------------------------*/
+.acf-childbuilder .acf-input-table {
+  margin: 0 0 8px;
+}
+
+.acf-childbuilder .acf-row.acf-clone, .acf-childbuilder .acf-table.acf-clone {
+  display: none !important;
+}
+
+.acf-childbuilder .acf-input-table td.remove .acf-icon {
+  position: relative;
+  margin-left: -1px;
+}
+
+.acf-childbuilder .acf-input-table td.remove .acf-childbuilder-add-row {
+  position: absolute;
+  margin-top: -22px;
+}
+
+/* sortable */
+.acf-childbuilder table.ui-sortable-helper {
+  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.acf-childbuilder table.ui-sortable-placeholder {
+  visibility: visible !important;
+}
+
+.acf-childbuilder table.ui-sortable-placeholder td {
+  background: #F9F9F9;
+}
+
+/* empty */
+.acf-childbuilder.empty table thead th {
+  border-bottom: 0 none;
+}
+
+.acf-childbuilder.empty table.row-layout {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  border: 0 none;
+  margin: 0;
+}
+
+/*# sourceMappingURL=acf-child-post-field.css.map */

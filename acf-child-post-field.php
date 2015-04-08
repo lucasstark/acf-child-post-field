@@ -33,7 +33,7 @@ class ACF_Child_Post_Field {
 			self::$instance = new ACF_Child_Post_Field();
 		}
 	}
-
+	
 	public function __construct() {
 		add_action('acf/include_field_types', array($this, 'on_include_field_types'));		
 	}
