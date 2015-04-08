@@ -752,6 +752,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 					if ( $field['child_management_type'] == 'create_only_and_link' || $field['child_management_type'] == 'create_and_search_and_link' ) {
 						$post_data['post_parent'] = $post_id;
+						$post_data['menu_order'] = $i;
 					}
 
 					$result = wp_insert_post( $post_data );
