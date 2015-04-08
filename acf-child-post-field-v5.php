@@ -768,11 +768,11 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 					}
 
 					if ( !$field['include_content_editor'] ) {
-						$post_data['post_title'] = $the_child_post->post_content;
+						$post_data['post_content'] = $the_child_post->post_content;
 					}
 
 					if ( !$field['include_excerpt_editor'] ) {
-						$post_data['post_title'] = $the_child_post->post_excerpt;
+						$post_data['post_excerpt'] = $the_child_post->post_excerpt;
 					}
 
 					wp_update_post( $post_data );
