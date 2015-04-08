@@ -529,7 +529,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 
 				<ul class="acf-hl acf-tfoot">
-					<li class="comic-sans"><i class="acf-sprite-arrow"></i><?php _e('Drag and drop to reorder', 'acf'); ?></li>
+					<li class="comic-sans"><i class="acf-sprite-arrow"></i><?php _e( 'Drag and drop to reorder', 'acf' ); ?></li>
 					<li class="acf-fr">
 						<a href="#" class="acf-button blue acf-childbuilder-add-row">+ <?php echo $field['button_label']; ?></a>
 					</li>
@@ -764,9 +764,13 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 	function update_value( $value, $post_id, $field ) {
 
+		$post = get_post( $post_id );
+		if ( wp_is_post_autosave( $post ) || wp_is_post_revision( $post ) ) {
+			return $value;
+		}
+
 		// remove acfcloneindex
 		if ( isset( $value['acfcloneindex'] ) ) {
-
 			unset( $value['acfcloneindex'] );
 		}
 
@@ -784,146 +788,55 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 			// loop through rows
 			foreach ( $value as $row ) {
-
-				$sub_field = $field['acf_child_field'];
-
 				// $i
 				$i++;
-
-
-				// increase total
-				$total++;
-
-				//Update the actual child post
-				$child_post_id = 0;
-				if ( isset( $row['_acf_child_field_post_id'] ) && !empty( $row['_acf_child_field_post_id'] ) ) {
-					$child_post_id = $row['_acf_child_field_post_id'];
-				}
-
-				$post_data = array(
-				    'post_type' => $field['post_type'],
-				    'post_status' => 'publish',
-				    'post_author' => get_current_user_id(),
-				    'post_title' => isset( $row['post_data']['post_title'] ) ? $row['post_data']['post_title'] : '',
-				    'post_content' => isset( $row['post_data']['post_content'] ) ? $row['post_data']['post_content'] : '',
-				    'post_excerpt' => isset( $row['post_data']['post_excerpt'] ) ? $row['post_data']['post_excerpt'] : '',
-				);
-
-				if ( empty( $child_post_id ) ) {
-
-					if ( $field['child_management_type'] == 'create_only_and_link' || $field['child_management_type'] == 'create_and_search_and_link' ) {
-						$post_data['post_parent'] = $post_id;
-						$post_data['menu_order'] = $i;
-					}
-
-					$result = wp_insert_post( $post_data );
-					if ( $result && !is_wp_error( $result ) ) {
-						$child_post_id = $result;
-					}
-
-					add_post_meta( $child_post_id, '_acf_child_post_field_belongs_to', $post_id );
-				} else {
-
-					$the_child_post = get_post( $child_post_id );
-					$post_data['ID'] = $child_post_id;
-
-					if ( $field['child_management_type'] == 'create_only_and_link' || $field['child_management_type'] == 'create_and_search_and_link' ) {
-						$post_data['post_parent'] = $post_id;
-					}
-
-
-					//Reset the fields if we haven't configured them to be editable. 
-					if ( !$field['include_title_editor'] ) {
-						$post_data['post_title'] = $the_child_post->post_title;
-					}
-
-					if ( !$field['include_content_editor'] ) {
-						$post_data['post_content'] = $the_child_post->post_content;
-					}
-
-					if ( !$field['include_excerpt_editor'] ) {
-						$post_data['post_excerpt'] = $the_child_post->post_excerpt;
-					}
-
-					wp_update_post( $post_data );
-
-					if ( $field['include_featured_image_editor'] ) {
-						$image_id = isset( $row['post_data']['featured_image'] ) ? $row['post_data']['featured_image'] : 0;
-						update_post_meta( $child_post_id, '_thumbnail_id', $image_id );
-					}
-
-
-					$belongs_to = get_post_meta( $child_post_id, '_acf_child_post_field_belongs_to', false );
-					if ( empty( $belongs_to ) && !in_array( $post_id, $belongs_to ) ) {
-						add_post_meta( $child_post_id, '_acf_child_post_field_belongs_to', $post_id );
-					}
-				}
-
-
-
-
-				// modify name for save
+				$sub_field = $field['acf_child_field'];
 				$sub_field['name'] = "{$field['name']}_{$i}_acf_child_field_post_id";
 
-
-				// update field
-				acf_update_value( $child_post_id, $post_id, $sub_field );
-
-				// loop through sub fields which have been loaded from the child field groups. 
-				if ( !empty( $field['acf_child_field_fields'] ) ) {
-
-					foreach ( $field['acf_child_field_fields'] as $child_field ) {
-						$child_value = false;
-
-						// key (backend)
-						if ( isset( $row[$child_field['key']] ) ) {
-							$child_value = $row[$child_field['key']];
-						} elseif ( isset( $row[$child_field['name']] ) ) {
-
-							$child_value = $row[$child_field['name']];
-						} else {
-							// input is not set (hidden by conditioanl logic)
-							continue;
-						}
-
-						// update field
-						acf_update_value( $child_value, $child_post_id, $child_field );
-					}
-
-					// foreach
+				
+				// increase total
+				
+				$child_post_id = $this->update_child_value($post_id, $row, $field, $i);
+				if ( !empty($child_post_id) ) {
+					$total++;
+					acf_update_value( $child_post_id, $post_id, $sub_field );
 				}
+
+
 				// if
 			}
 			// foreach
 		}
+
+
 		// if
 		// get old value (db only)
 		$old_total = intval( acf_get_value( $post_id, $field, true ) );
-		
-		if ( $old_total > $total ) {
-			
-			for ( $i = $total; $i < $old_total; $i++ ) {
-				
-				$key = "{$field['name']}_{$i}{$field['acf_child_field']['name']}";
-				$child_to_remove = get_post_meta($post_id, $key, true );
-				
-				if (!empty($child_to_remove)){
-					if ( $field['child_management_type'] == 'create_only_and_link' || $field['child_management_type'] == 'create_and_search_and_link' ) {
-						wp_delete_post($child_to_remove, true);
-					} else {
-						$child_to_remove_post = get_post($child_to_remove);
-						if ($child_to_remove_post->post_parent == $post_id){
 
-							wp_update_post(array(
-							    'ID' => $child_to_remove, 
+		if ( $old_total > $total ) {
+
+			for ( $i = $total; $i < $old_total; $i++ ) {
+
+				$key = "{$field['name']}_{$i}{$field['acf_child_field']['name']}";
+				$child_to_remove = get_post_meta( $post_id, $key, true );
+
+				if ( !empty( $child_to_remove ) ) {
+					if ( $field['child_management_type'] == 'create_only_and_link' || $field['child_management_type'] == 'create_and_search_and_link' ) {
+						wp_delete_post( $child_to_remove, true );
+					} else {
+						$child_to_remove_post = get_post( $child_to_remove );
+						if ( $child_to_remove_post->post_parent == $post_id ) {
+
+							wp_update_post( array(
+							    'ID' => $child_to_remove,
 							    'post_parent' => 0
-							));
+							) );
 						}
 
-						delete_post_meta($child_to_remove, '_acf_child_post_field_belongs_to', $post_id);
+						delete_post_meta( $child_to_remove, '_acf_child_post_field_belongs_to', $post_id );
 					}
 				}
-				
+
 				acf_delete_value( $post_id, $key );
 			}
 			// for
@@ -935,6 +848,98 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 		// return
 		return $value;
+	}
+
+	private function update_child_value( $post_id, $row, $field, $i ) {
+
+		$child_post_id = 0;
+		if ( isset( $row['_acf_child_field_post_id'] ) && !empty( $row['_acf_child_field_post_id'] ) ) {
+			$child_post_id = $row['_acf_child_field_post_id'];
+		}
+
+		$post_data = array(
+		    'post_type' => $field['post_type'],
+		    'post_status' => 'publish',
+		    'post_author' => get_current_user_id(),
+		    'post_title' => isset( $row['post_data']['post_title'] ) ? $row['post_data']['post_title'] : '',
+		    'post_content' => isset( $row['post_data']['post_content'] ) ? $row['post_data']['post_content'] : '',
+		    'post_excerpt' => isset( $row['post_data']['post_excerpt'] ) ? $row['post_data']['post_excerpt'] : '',
+		);
+
+		if ( empty( $child_post_id ) ) {
+
+			if ( $field['child_management_type'] == 'create_only_and_link' || $field['child_management_type'] == 'create_and_search_and_link' ) {
+				$post_data['post_parent'] = $post_id;
+				$post_data['menu_order'] = $i;
+			}
+
+			$result = wp_insert_post( $post_data );
+			if ( $result && !is_wp_error( $result ) ) {
+				$child_post_id = $result;
+			}
+
+			add_post_meta( $child_post_id, '_acf_child_post_field_belongs_to', $post_id );
+		} else {
+
+			$the_child_post = get_post( $child_post_id );
+			$post_data['ID'] = $child_post_id;
+
+			if ( $field['child_management_type'] == 'create_only_and_link' || $field['child_management_type'] == 'create_and_search_and_link' ) {
+				$post_data['post_parent'] = $post_id;
+			}
+
+
+			//Reset the fields if we haven't configured them to be editable. 
+			if ( !$field['include_title_editor'] ) {
+				$post_data['post_title'] = $the_child_post->post_title;
+			}
+
+			if ( !$field['include_content_editor'] ) {
+				$post_data['post_content'] = $the_child_post->post_content;
+			}
+
+			if ( !$field['include_excerpt_editor'] ) {
+				$post_data['post_excerpt'] = $the_child_post->post_excerpt;
+			}
+
+			wp_update_post( $post_data );
+
+			if ( $field['include_featured_image_editor'] ) {
+				$image_id = isset( $row['post_data']['featured_image'] ) ? $row['post_data']['featured_image'] : 0;
+				update_post_meta( $child_post_id, '_thumbnail_id', $image_id );
+			}
+
+
+			$belongs_to = get_post_meta( $child_post_id, '_acf_child_post_field_belongs_to', false );
+			if ( empty( $belongs_to ) && !in_array( $post_id, $belongs_to ) ) {
+				add_post_meta( $child_post_id, '_acf_child_post_field_belongs_to', $post_id );
+			}
+		}
+
+
+		// loop through sub fields which have been loaded from the child field groups. 
+		if ( !empty( $field['acf_child_field_fields'] ) ) {
+
+			foreach ( $field['acf_child_field_fields'] as $child_field ) {
+				$child_value = false;
+
+				// key (backend)
+				if ( isset( $row[$child_field['key']] ) ) {
+					$child_value = $row[$child_field['key']];
+				} elseif ( isset( $row[$child_field['name']] ) ) {
+
+					$child_value = $row[$child_field['name']];
+				} else {
+					// input is not set (hidden by conditioanl logic)
+					continue;
+				}
+
+				// update field
+				acf_update_value( $child_value, $child_post_id, $child_field );
+			}
+		}
+
+		return $child_post_id;
 	}
 
 	/*
