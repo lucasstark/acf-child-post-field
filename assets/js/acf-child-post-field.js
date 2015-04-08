@@ -16,7 +16,7 @@
 			'click .acf-childbuilder-remove-row': 'remove',
 		},
 		focus: function () {
-
+			
 			this.$el = this.$field.find('.acf-childbuilder:first');
 			this.$input = this.$field.find('input:first');
 			this.$field_list = this.$el.find('div.acf-field-list');
@@ -29,6 +29,11 @@
 			this.$field.on('click', '.edit-field', function (e) {
 				e.preventDefault();
 				self.edit_field( $(this).closest('div.acf-field-object') );
+			});
+			
+			this.$field.on('click', '.delete-field', function (e) {
+				e.preventDefault();
+				self.remove( $(this).closest('div.acf-field-object') );
 			});
 
 			// CSS fix
@@ -211,52 +216,69 @@
 			// return
 			return $html;
 		},
-		remove: function (e) {
-
-			// reference
-			var self = this,
-				$field = this.$field;
-
-
-			// vars
-			var $tr = e.$el.closest('.acf-row'),
-				$table = $tr.closest('table');
-
-
+		remove : function( $el ){
 			// validate
 			if (this.count() <= this.o.min) {
-
-				alert(acf._e('childbuilder', 'min').replace('{min}', this.o.min));
-				return false;
+				//TODO:  Add in min checking
+				//alert(acf._e('childbuilder', 'min').replace('{min}', this.o.min));
+				//return false;
 			}
-
-
-			// trigger change to allow attachmetn save
-			this.$input.trigger('change');
-
-
-			// animate out tr
-			acf.remove_tr($tr, function () {
-
-				// render
-				self.doFocus($field).render();
-
-
-				// trigger mouseenter on parent childbuilder to work out css margin on add-row button
-				$field.closest('.acf-row').trigger('mouseenter');
-
-
-				// trigger conditional logic render
-				// when removing a row, there may not be a need for some appear-empty cells
-				if ($table.hasClass('table-layout')) {
-
-					acf.conditional_logic.render($table);
-
-				}
-
-
+			
+			// reference
+			var self = this;
+			
+			// vars
+			var $field_list	= $el.closest('.acf-field-list');
+			
+			// set layout
+			$el.css({
+				height		: $el.height(),
+				width		: $el.width(),
+				position	: 'absolute'
 			});
-
+			
+			
+			// wrap field
+			$el.wrap( '<div class="temp-field-wrap" style="height:' + $el.height() + 'px"></div>' );
+			
+			
+			// fade $el
+			$el.animate({ opacity : 0 }, 250);
+			
+			
+			// close field
+			var end_height = 0,
+			$show = false;
+			
+			
+			if( $field_list.children('.acf-field-object').length == 1 ) {
+				//TODO:  Add in no children message. 
+				//$show = $field_list.children('.no-fields-message');
+				//end_height = $show.outerHeight();
+			}
+			
+			$el.parent('.temp-field-wrap').animate({ height : end_height }, 250, function(){
+				
+				// show another element
+				if( $show ) {
+				
+					$show.show();
+					
+				}
+				
+				
+				// action for 3rd party customization 
+				acf.do_action('remove', $(this));
+				
+				
+				// remove $el
+				$(this).remove();
+				
+				
+				// render fields becuase they have changed
+				self.render();
+				
+			});
 		},
 		/*
 		 *  edit_field
