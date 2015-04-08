@@ -899,12 +899,32 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		// if
 		// get old value (db only)
 		$old_total = intval( acf_get_value( $post_id, $field, true ) );
-
+		
 		if ( $old_total > $total ) {
-
+			
 			for ( $i = $total; $i < $old_total; $i++ ) {
-				acf_delete_value( $post_id, "{$field['name']}_{$i}_{$field['acf_child_field']['name']}" );
-				// foreach
+				
+				$key = "{$field['name']}_{$i}{$field['acf_child_field']['name']}";
+				$child_to_remove = get_post_meta($post_id, $key, true );
+				
+				if (!empty($child_to_remove)){
+					if ( $field['child_management_type'] == 'create_only_and_link' || $field['child_management_type'] == 'create_and_search_and_link' ) {
+						wp_delete_post($child_to_remove, true);
+					} else {
+						$child_to_remove_post = get_post($child_to_remove);
+						if ($child_to_remove_post->post_parent == $post_id){
+
+							wp_update_post(array(
+							    'ID' => $child_to_remove, 
+							    'post_parent' => 0
+							));
+						}
+
+						delete_post_meta($child_to_remove, '_acf_child_post_field_belongs_to', $post_id);
+					}
+				}
+				
+				acf_delete_value( $post_id, $key );
 			}
 			// for
 		}
