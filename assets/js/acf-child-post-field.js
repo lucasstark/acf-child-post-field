@@ -35,6 +35,13 @@
 				e.preventDefault();
 				self.remove( $(this).closest('div.acf-field-object') );
 			});
+			
+			this.$field.on('keyup', 'div[data-key="acf-child-post-field-post-title"] input', function( e ){
+				
+				self.update_child_title_label( $(this) );
+				
+			});
+			
 
 			// CSS fix
 			/*
@@ -371,7 +378,12 @@
 
 
 			// animate toggle
-			$el.children('.settings').animate({'height': 'toggle'}, 250);		},
+			$el.children('.settings').animate({'height': 'toggle'}, 250);		
+		},
+		update_child_title_label : function($input) {
+			var $el =  $input.closest('div.acf-field-object');
+			$el.find('.handle .li-field-label strong a').text( $input.val() );
+		},
 	});
 
 })(jQuery);

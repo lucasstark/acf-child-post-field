@@ -432,11 +432,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 											<?php endif; ?>
 
 											<?php echo $before_fields; ?>
-
-
-
-
-
+													
 											<?php
 											// render input
 											acf_render_field_wrap( $sub_field, $el );
@@ -448,6 +444,7 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 												    'label' => 'Title',
 												    'type' => 'text',
 												    'value' => $post->post_title,
+												    'key' => 'acf-child-post-field-post-title',
 												    'required' => true
 													) ), $el );
 											}
