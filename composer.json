@@ -1,0 +1,10 @@
+{
+  "name": "lucasstark/acf-child-post-field",
+  "description": "Adds the ability to edit related posts directly from a parent post.",
+  "keywords": ["wordpress", "acf"],
+  "license": "GPL2",
+  "type": "wordpress-plugin",
+  "require": {
+    "composer/installers": "~1.0"
+  }
+}
