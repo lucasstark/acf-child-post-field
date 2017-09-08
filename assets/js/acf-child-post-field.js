@@ -36,7 +36,7 @@
 				self.remove( $(this).closest('div.acf-field-object') );
 			});
 			
-			this.$field.on('keyup', 'div[data-key="acf-child-post-field-post-title"] input', function( e ){
+			this.$field.on('keyup', 'div input[name$="[post_title]"]', function( e ){
 				
 				self.update_child_title_label( $(this) );
 				

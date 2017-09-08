@@ -444,7 +444,8 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 												    'label' => 'Title',
 												    'type' => 'text',
 												    'value' => $post->post_title,
-												    'key' => 'acf-child-post-field-post-title',
+												    // Removed key as it broke the title
+												    //'key' => 'acf-child-post-field-post-title',
 												    'required' => true
 													) ), $el );
 											}
