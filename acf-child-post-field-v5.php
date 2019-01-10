@@ -806,6 +806,17 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 			unset( $value['acfcloneindex'] );
 		}
 
+		/**
+		 * TODO: Redundant meta data still gets left in db when we delete 
+		 * a repeater row where there are subsequent rows left in place 
+		 * after it. It would be better to simply compare what's in the db
+		 * with what's in the $value array or purge all meta data prior to 
+		 * updating.
+		 * 
+		 * This appears to be non-critical / non-breaking at present but 
+		 * could be a gotcha for custom SQL queries.
+		 */
+
 		// Act on redundant rows 
 		if( count($redundant_rows) > 0 ) {
 
