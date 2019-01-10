@@ -788,7 +788,12 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		$db_value = acf_get_value( $post_id, $field );
 
 		// Rows removed from the repeater field
-		$redundant_rows = array_diff_key( $db_value, $value );
+		$redundant_rows = is_array($value) ? array_diff_key( $db_value, $value ) : array();
+
+		// If $value is empty but db isn't, consolidate db
+		if( count($redundant_rows) == 0 && count($db_value) > 0 ) {
+			$redundant_rows = $db_value;
+		}
 		
 		// Do nothing for autosaves and revisions
 		$post = get_post( $post_id );
