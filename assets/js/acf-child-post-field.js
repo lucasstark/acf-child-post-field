@@ -22,6 +22,8 @@
       this.o = acf.get_data(this.$el)
     },
     initialize: function() {
+      var self = this
+
       // field events
       this.$field.on("click", ".edit-field", function(e) {
         e.preventDefault()
