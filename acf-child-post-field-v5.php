@@ -790,8 +790,8 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		// Rows removed from the repeater field
 		$redundant_rows = is_array($value) ? array_diff_key( $db_value, $value ) : array();
 
-		// If $value is empty but db isn't, consolidate db
-		if( count($redundant_rows) == 0 && count($db_value) > 0 ) {
+		// If there's no data to update but there's data still in the db, consolidate 
+		if( !is_array($value) && count($db_value) > 0 ) {
 			$redundant_rows = $db_value;
 		}
 		
