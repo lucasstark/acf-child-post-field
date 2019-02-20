@@ -320,21 +320,30 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 		    'name' => $field['name'],
 		) );
 		?>
-		<div id="acf-child-post-field-posts" <?php acf_esc_attr_e( array('class' => 'acf-childbuilder', 'data-min' => $field['min'], 'data-max' => $field['max']) ); ?>>
+<div id="acf-child-post-field-posts" <?php acf_esc_attr_e( array('class'=> 'acf-childbuilder', 'data-min' =>
+  $field['min'], 'data-max' => $field['max']) ); ?>>
 
-			<div class="acf-field-list-wrap">
-				<ul class="acf-hl acf-thead">
-					<li class="li-field-order"><?php _e( 'Order', 'acf_child_post_field' ); ?></li>
-					<li class="li-field-label"><?php _e( 'Title', 'acf_child_post_field' ); ?></li>
-					<li class="li-field-name"><?php _e( 'Created', 'acf_child_post_field' ); ?></li>
-					<li class="li-field-type"><?php _e( 'Author' ); ?></li>
-				</ul>
+  <div class="acf-field-list-wrap">
+    <ul class="acf-hl acf-thead">
+      <li class="li-field-order">
+        <?php _e( 'Order', 'acf_child_post_field' ); ?>
+      </li>
+      <li class="li-field-label">
+        <?php _e( 'Title', 'acf_child_post_field' ); ?>
+      </li>
+      <li class="li-field-name">
+        <?php _e( 'Created', 'acf_child_post_field' ); ?>
+      </li>
+      <li class="li-field-type">
+        <?php _e( 'Author' ); ?>
+      </li>
+    </ul>
 
-				<div class="acf-field-list">
+    <div class="acf-field-list">
 
-					<?php foreach ( $field['value'] as $i => $row ): ?>
-						<?php $clone_class = ($i === 'acfcloneindex') ? ' acf-clone' : ''; ?>
-						<?php
+      <?php foreach ( $field['value'] as $i => $row ): ?>
+      <?php $clone_class = ($i === 'acfcloneindex') ? ' acf-clone' : ''; ?>
+      <?php
 						// prevent childbuilder field from creating multiple conditional logic items for each row
 						$sub_field = $field['acf_child_field'];
 						if ( $i !== 'acfcloneindex' ) {
@@ -372,30 +381,39 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 							$post->post_date = '0000-00-00 00:00:00';
 						}
 						?>
-						<div class="acf-field-object <?php echo $clone_class; ?>">
+      <div class="acf-field-object <?php echo $clone_class; ?>">
 
-							<div class="meta">
+        <div class="meta">
 
-							</div>
+        </div>
 
-							<div class="handle">
-								<ul class="acf-hl acf-tbody">
-									<li class="li-field-order">
-										<span class="acf-icon large"><?php echo $i; ?></span>
-									</li>
-									<li class="li-field-label">
-										<strong>
-											<a class="edit-field" title="<?php _e( 'Edit', 'acf_child_post_field' ); ?> <?php echo esc_attr( $field['child_label'] ); ?>" href="#"><?php echo $post->post_title; ?></a>
-										</strong>
-										<div class="row-options">
-											<a class="edit-field" title="<?php _e( 'Edit', 'acf_child_post_field' ); ?> <?php echo esc_attr( $field['child_label'] ); ?>" href="#"><?php _e( 'Edit', 'acf_child_post_field' ); ?></a>
-											<a class="duplicate-field" title="<?php _e( 'Duplicate', 'acf_child_post_field' ); ?> <?php echo esc_attr( $field['child_label'] ); ?>" href="#"><?php _e( 'Duplicate', 'acf_child_post_field' ); ?></a>
-											<a class="delete-field" title="<?php _e( 'Delete', 'acf_child_post_field' ); ?> <?php echo esc_attr( $field['child_label'] ); ?>" href="#"><?php _e( 'Delete', 'acf_child_post_field' ); ?></a>
-										</div>
-									</li>
-									<li class="li-field-name">
+        <div class="handle">
+          <ul class="acf-hl acf-tbody">
+            <li class="li-field-order">
+              <span class="acf-icon large">
+                <?php echo $i; ?></span>
+            </li>
+            <li class="li-field-label">
+              <strong>
+                <a class="edit-field" title="<?php _e( 'Edit', 'acf_child_post_field' ); ?> <?php echo esc_attr( $field['child_label'] ); ?>"
+                  href="#">
+                  <?php echo $post->post_title; ?></a>
+              </strong>
+              <div class="row-options">
+                <a class="edit-field" title="<?php _e( 'Edit', 'acf_child_post_field' ); ?> <?php echo esc_attr( $field['child_label'] ); ?>"
+                  href="#">
+                  <?php _e( 'Edit', 'acf_child_post_field' ); ?></a>
+                <a class="duplicate-field" title="<?php _e( 'Duplicate', 'acf_child_post_field' ); ?> <?php echo esc_attr( $field['child_label'] ); ?>"
+                  href="#">
+                  <?php _e( 'Duplicate', 'acf_child_post_field' ); ?></a>
+                <a class="delete-field" title="<?php _e( 'Delete', 'acf_child_post_field' ); ?> <?php echo esc_attr( $field['child_label'] ); ?>"
+                  href="#">
+                  <?php _e( 'Delete', 'acf_child_post_field' ); ?></a>
+              </div>
+            </li>
+            <li class="li-field-name">
 
-										<?php
+              <?php
 										if ( '0000-00-00 00:00:00' == $post->post_date ) {
 											$t_time = $h_time = __( 'Unpublished' );
 											$time_diff = 0;
@@ -416,24 +434,25 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 										?>
 
 
-									</li>
-									<li class="li-field-type"><?php printf( '<a href="%s">%s</a>', esc_url( add_query_arg( array('post_type' => $post->post_type, 'author' => get_the_author_meta( 'ID', $post->post_author )), 'edit.php' ) ), get_the_author_meta( 'display_name', $post->post_author ) ); ?>
-									</li>	
-								</ul>
-							</div>
+            </li>
+            <li class="li-field-type">
+              <?php printf( '<a href="%s">%s</a>', esc_url( add_query_arg( array('post_type' => $post->post_type, 'author' => get_the_author_meta( 'ID', $post->post_author )), 'edit.php' ) ), get_the_author_meta( 'display_name', $post->post_author ) ); ?>
+            </li>
+          </ul>
+        </div>
 
-							<div class="settings">
-								<table <?php acf_esc_attr_e( array('class' => "acf-table acf-input-table {$field['layout']}-layout") ); ?>>
-									<tbody>
-										<tr class="acf-row">
+        <div class="settings">
+          <table <?php acf_esc_attr_e( array('class'=> "acf-table acf-input-table {$field['layout']}-layout") ); ?>>
+            <tbody>
+              <tr class="acf-row">
 
-											<?php if ( $show_order ): ?>
-												<td class="order"></td>
-											<?php endif; ?>
+                <?php if ( $show_order ): ?>
+                <td class="order"></td>
+                <?php endif; ?>
 
-											<?php echo $before_fields; ?>
-													
-											<?php
+                <?php echo $before_fields; ?>
+
+                <?php
 											// render input
 											acf_render_field_wrap( $sub_field, $el );
 
@@ -507,35 +526,38 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 												acf_render_field_wrap( $child_field, $el );
 												?>
 
-											<?php endforeach; ?>
+                <?php endforeach; ?>
 
-											<?php echo $after_fields; ?>
-
-
-											<td class="remove">
-											</td>
+                <?php echo $after_fields; ?>
 
 
-										</tr>
-
-									</tbody>
-								</table>
-							</div>
-						</div>
-					<?php endforeach; ?>
-				</div>
+                <td class="remove">
+                </td>
 
 
-				<ul class="acf-hl acf-tfoot">
-					<li class="comic-sans"><i class="acf-sprite-arrow"></i><?php _e( 'Drag and drop to reorder', 'acf' ); ?></li>
-					<li class="acf-fr">
-						<a href="#" class="acf-button blue acf-childbuilder-add-row">+ <?php echo $field['button_label']; ?></a>
-					</li>
-				</ul>
-			</div>
+              </tr>
 
-		</div>
-		<?php
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </div>
+
+
+    <ul class="acf-hl acf-tfoot">
+      <li class="comic-sans"><i class="acf-sprite-arrow"></i>
+        <?php _e( 'Drag and drop to reorder', 'acf' ); ?>
+      </li>
+      <li class="acf-fr">
+        <a href="#" class="acf-button blue acf-childbuilder-add-row">+
+          <?php echo $field['button_label']; ?></a>
+      </li>
+    </ul>
+  </div>
+
+</div>
+<?php
 	}
 
 	function input_admin_enqueue_scripts() {
@@ -762,60 +784,47 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 
 	function update_value( $value, $post_id, $field ) {
 
+		// The value currently stored (hasn't been overwritten yet)
+		$db_value = acf_get_value( $post_id, $field );
+
+		// Rows removed from the repeater field
+		$redundant_rows = is_array($value) ? array_diff_key( $db_value, $value ) : array();
+
+		// If there's no data to update but there's data still in the db, consolidate 
+		if( !is_array($value) && count($db_value) > 0 ) {
+			$redundant_rows = $db_value;
+		}
+		
+		// Do nothing for autosaves and revisions
 		$post = get_post( $post_id );
 		if ( wp_is_post_autosave( $post ) || wp_is_post_revision( $post ) ) {
 			return $value;
 		}
 
-		// remove acfcloneindex
+		// Remove acfcloneindex
 		if ( isset( $value['acfcloneindex'] ) ) {
 			unset( $value['acfcloneindex'] );
 		}
 
+		/**
+		 * TODO: Redundant meta data still gets left in db when we delete 
+		 * a repeater row where there are subsequent rows left in place 
+		 * after it. It would be better to simply compare what's in the db
+		 * with what's in the $value array or purge all meta data prior to 
+		 * updating.
+		 * 
+		 * This appears to be non-critical / non-breaking at present but 
+		 * could be a gotcha for custom SQL queries.
+		 */
 
-		// vars
-		$total = 0;
+		// Act on redundant rows 
+		if( count($redundant_rows) > 0 ) {
 
+			foreach( $redundant_rows as $index => $row ) {
 
-		// update sub fields
-		if ( !empty( $value ) ) {
+				$key = "{$field['name']}_{$index}{$field['acf_child_field']['name']}";
 
-			// $i
-			$i = -1;
-
-
-			// loop through rows
-			foreach ( $value as $row ) {
-				// $i
-				$i++;
-				$sub_field = $field['acf_child_field'];
-				$sub_field['name'] = "{$field['name']}_{$i}_acf_child_field_post_id";
-
-				
-				// increase total
-				
-				$child_post_id = $this->update_child_value($post_id, $row, $field, $i);
-				if ( !empty($child_post_id) ) {
-					$total++;
-					acf_update_value( $child_post_id, $post_id, $sub_field );
-				}
-
-
-				// if
-			}
-			// foreach
-		}
-
-
-		// if
-		// get old value (db only)
-		$old_total = intval( acf_get_value( $post_id, $field, true ) );
-
-		if ( $old_total > $total ) {
-
-			for ( $i = $total; $i < $old_total; $i++ ) {
-
-				$key = "{$field['name']}_{$i}{$field['acf_child_field']['name']}";
+				// Check a value exists in the db
 				$child_to_remove = get_post_meta( $post_id, $key, true );
 
 				if ( !empty( $child_to_remove ) ) {
@@ -835,16 +844,43 @@ class ACF_Child_Post_Field_V5 extends acf_field {
 					}
 				}
 
-				acf_delete_value( $post_id, $key );
+				// Delete redundant meta data
+				acf_delete_metadata( $post_id, $key );
+				acf_delete_metadata( $post_id, $key, true );
+				
 			}
-			// for
+
 		}
 
-		// if
-		// update $value and return to allow for the normal save function to run
+		// Tally children
+		$total = 0;
+
+		// Update sub fields
+		if ( !empty( $value ) ) {
+
+			$i = -1;
+
+			// Loop through rows
+			foreach ( $value as $row ) {
+
+				$i++;
+				$sub_field = $field['acf_child_field'];
+				$sub_field['name'] = "{$field['name']}_{$i}_acf_child_field_post_id";
+
+				// Increase total
+				$child_post_id = $this->update_child_value($post_id, $row, $field, $i);
+				if ( !empty($child_post_id) ) {
+					$total++;
+					acf_update_value( $child_post_id, $post_id, $sub_field );
+				}
+
+			}
+
+		}
+
+		// Update $value and return to allow for the normal save function to run
 		$value = $total;
 
-		// return
 		return $value;
 	}
 

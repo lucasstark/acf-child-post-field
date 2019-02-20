@@ -1,30 +1,7 @@
 # acf-child-post-field
-Adds the ability to edit related posts directly from a parent post. 
 
-Contributors: lucasstark
+Forked from https://github.com/lucasstark/acf-child-post-field
 
-Requires at least: 4.0
+Code had multiple errors at the point where I forked it - I've gone some way to fixing these and the plugin is now stable **for my required use**. You may still find bugs that are critical. See my commits for more info and the [original repo](https://github.com/lucasstark/acf-child-post-field) for info on what the plugin does. 
 
-Tested up to: 4.8.1
-
-Stable tag: 1.0.0
-
-License: GPLv3
-
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
-
-
-Child Post Field is a field similar to the Post Object field, however it allows you to actually edit a selected post directly from the parent post referencing it.  This is very useful when you are using custom post types which are logically hierarchical in nature.  
-
-Examples of use case might include:
-House -> Rooms
-
-Degree Programs -> Courses
-
-Teams -> Team Members
-
-Products -> Product Variations
-
-Workshop -> Speakers
-
-Any time you would normally use a post object field or a post relation field you can use this instead.  It will allow you to directly edit the "child" posts from it's parent. 
+*"Any time you would normally use a post object field or a post relation field you can use this instead.  It will allow you to directly edit the 'child' posts from its parent."*
